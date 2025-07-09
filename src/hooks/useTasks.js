@@ -111,11 +111,74 @@ export const useTasks = () => {
     }
   };
 
+const createSubtask = async (taskId, subtaskData) => {
+    try {
+      const updatedTask = await taskService.createSubtask(taskId, subtaskData);
+      setTasks(prev => 
+        prev.map(task => task.Id === parseInt(taskId) ? updatedTask : task)
+      );
+      toast.success("Subtask created successfully!");
+      return updatedTask;
+    } catch (err) {
+      toast.error("Failed to create subtask");
+      throw err;
+    }
+  };
+
+  const updateSubtask = async (taskId, subtaskId, updateData) => {
+    try {
+      const updatedTask = await taskService.updateSubtask(taskId, subtaskId, updateData);
+      setTasks(prev => 
+        prev.map(task => task.Id === parseInt(taskId) ? updatedTask : task)
+      );
+      toast.success("Subtask updated successfully!");
+      return updatedTask;
+    } catch (err) {
+      toast.error("Failed to update subtask");
+      throw err;
+    }
+  };
+
+  const deleteSubtask = async (taskId, subtaskId) => {
+    try {
+      const updatedTask = await taskService.deleteSubtask(taskId, subtaskId);
+      setTasks(prev => 
+        prev.map(task => task.Id === parseInt(taskId) ? updatedTask : task)
+      );
+      toast.success("Subtask deleted successfully!");
+      return updatedTask;
+    } catch (err) {
+      toast.error("Failed to delete subtask");
+      throw err;
+    }
+  };
+
+  const toggleSubtaskComplete = async (taskId, subtaskId) => {
+    try {
+      const updatedTask = await taskService.toggleSubtaskComplete(taskId, subtaskId);
+      setTasks(prev => 
+        prev.map(task => task.Id === parseInt(taskId) ? updatedTask : task)
+      );
+      
+      const subtask = updatedTask.subtasks.find(s => s.Id === parseInt(subtaskId));
+      if (subtask?.completed) {
+        toast.success("Subtask completed! 🎉");
+      } else {
+        toast.info("Subtask marked as incomplete");
+      }
+      
+      return updatedTask;
+    } catch (err) {
+      toast.error("Failed to update subtask");
+      throw err;
+    }
+  };
+
   useEffect(() => {
     loadTasks();
   }, []);
 
-return {
+  return {
     tasks,
     categories,
     loading,
@@ -126,6 +189,10 @@ return {
     toggleTaskComplete,
     reorderTasks,
     createCategory,
+    createSubtask,
+    updateSubtask,
+    deleteSubtask,
+    toggleSubtaskComplete,
     refetch: loadTasks
   };
 };

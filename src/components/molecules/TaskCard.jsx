@@ -5,9 +5,11 @@ import Button from "@/components/atoms/Button";
 import Badge from "@/components/atoms/Badge";
 import Checkbox from "@/components/atoms/Checkbox";
 import ApperIcon from "@/components/ApperIcon";
+import ProgressRing from "@/components/molecules/ProgressRing";
 
-const TaskCard = ({ task, onToggleComplete, onEdit, onDelete }) => {
+const TaskCard = ({ task, onToggleComplete, onEdit, onDelete, onToggleSubtaskComplete }) => {
   const [isCompleting, setIsCompleting] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleToggleComplete = async () => {
     setIsCompleting(true);
@@ -34,10 +36,29 @@ const TaskCard = ({ task, onToggleComplete, onEdit, onDelete }) => {
       case "low": return "CheckCircle2";
       default: return "Circle";
     }
+};
+
+  const handleToggleSubtask = async (subtaskId) => {
+    try {
+      await onToggleSubtaskComplete(task.Id, subtaskId);
+    } catch (error) {
+      console.error('Failed to toggle subtask:', error);
+    }
+  };
+
+  // Calculate progress based on subtasks
+  const calculateProgress = () => {
+    if (!task.subtasks || task.subtasks.length === 0) {
+      return task.completed ? 100 : 0;
+    }
+    const completedSubtasks = task.subtasks.filter(subtask => subtask.completed).length;
+    return Math.round((completedSubtasks / task.subtasks.length) * 100);
   };
 
   const isOverdue = new Date(task.dueDate) < new Date() && !task.completed;
   const isToday = format(new Date(task.dueDate), "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd");
+  const progress = calculateProgress();
+  const hasSubtasks = task.subtasks && task.subtasks.length > 0;
 
   return (
     <motion.div
@@ -55,12 +76,33 @@ const TaskCard = ({ task, onToggleComplete, onEdit, onDelete }) => {
           />
         </div>
 
-        <div className="flex-1 min-w-0">
+<div className="flex-1 min-w-0">
           <div className="flex items-start justify-between mb-2">
-            <h3 className={`font-semibold text-lg task-title ${task.completed ? "line-through text-gray-500" : "text-gray-900"}`}>
-              {task.title}
-            </h3>
+            <div className="flex items-center gap-3">
+              <h3 className={`font-semibold text-lg task-title ${task.completed ? "line-through text-gray-500" : "text-gray-900"}`}>
+                {task.title}
+              </h3>
+              {hasSubtasks && (
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <ApperIcon 
+                    name={isExpanded ? "ChevronDown" : "ChevronRight"} 
+                    className="w-4 h-4" 
+                  />
+                </button>
+              )}
+            </div>
             <div className="flex items-center gap-2 flex-shrink-0">
+              {hasSubtasks && (
+                <div className="flex items-center gap-2">
+                  <ProgressRing progress={progress} size={32} strokeWidth={3} />
+                  <span className="text-xs text-gray-500">
+                    {task.subtasks.filter(s => s.completed).length}/{task.subtasks.length}
+                  </span>
+                </div>
+              )}
               <Badge variant="primary" size="sm">
                 {task.category}
               </Badge>
@@ -72,6 +114,30 @@ const TaskCard = ({ task, onToggleComplete, onEdit, onDelete }) => {
             <p className={`text-sm mb-3 ${task.completed ? "text-gray-500" : "text-gray-600"}`}>
               {task.description}
             </p>
+          )}
+
+          {/* Subtasks Section */}
+          {hasSubtasks && isExpanded && (
+            <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+              <h4 className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+                <ApperIcon name="List" className="w-4 h-4" />
+                Subtasks ({task.subtasks.filter(s => s.completed).length}/{task.subtasks.length})
+              </h4>
+              <div className="space-y-2">
+                {task.subtasks.map((subtask) => (
+                  <div key={subtask.Id} className="flex items-center gap-2 subtask-item">
+                    <Checkbox
+                      checked={subtask.completed}
+                      onChange={() => handleToggleSubtask(subtask.Id)}
+                      className="subtask-checkbox"
+                    />
+                    <span className={`text-sm ${subtask.completed ? "line-through text-gray-500" : "text-gray-700"}`}>
+                      {subtask.title}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
 
           <div className="flex items-center justify-between">

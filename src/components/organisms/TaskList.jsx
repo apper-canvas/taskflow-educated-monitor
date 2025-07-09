@@ -3,7 +3,7 @@ import { AnimatePresence, motion, Reorder } from "framer-motion";
 import ApperIcon from "@/components/ApperIcon";
 import Empty from "@/components/ui/Empty";
 import TaskCard from "@/components/molecules/TaskCard";
-const TaskList = ({ tasks, onToggleComplete, onEdit, onDelete, selectedCategory, onReorderTasks }) => {
+const TaskList = ({ tasks, onToggleComplete, onEdit, onDelete, selectedCategory, onReorderTasks, onToggleSubtaskComplete }) => {
   const [sortBy, setSortBy] = useState("dueDate");
   const [sortOrder, setSortOrder] = useState("asc");
 
@@ -138,11 +138,12 @@ const sortedTasks = [...filteredTasks].sort((a, b) => {
                   dragConstraints={{ top: 0, bottom: 0 }}
                   className="drag-item"
                 >
-                  <TaskCard
+<TaskCard
                     task={task}
                     onToggleComplete={onToggleComplete}
                     onEdit={onEdit}
                     onDelete={onDelete}
+                    onToggleSubtaskComplete={onToggleSubtaskComplete}
                   />
                 </Reorder.Item>
               ))}
@@ -182,11 +183,12 @@ const sortedTasks = [...filteredTasks].sort((a, b) => {
                   dragConstraints={{ top: 0, bottom: 0 }}
                   className="drag-item"
                 >
-                  <TaskCard
+<TaskCard
                     task={task}
                     onToggleComplete={onToggleComplete}
                     onEdit={onEdit}
                     onDelete={onDelete}
+                    onToggleSubtaskComplete={onToggleSubtaskComplete}
                   />
                 </Reorder.Item>
               ))}

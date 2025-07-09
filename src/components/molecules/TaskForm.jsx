@@ -12,10 +12,12 @@ const TaskForm = ({ onSubmit, categories, loading }) => {
     description: "",
     category: "",
     priority: "medium",
-    dueDate: ""
+    dueDate: "",
+    subtasks: []
   });
 
   const [errors, setErrors] = useState({});
+  const [newSubtask, setNewSubtask] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,17 +32,47 @@ const TaskForm = ({ onSubmit, categories, loading }) => {
       return;
     }
 
-    onSubmit(formData);
+onSubmit(formData);
     setFormData({
       title: "",
       description: "",
       category: "",
       priority: "medium",
-      dueDate: ""
+      dueDate: "",
+      subtasks: []
     });
     setErrors({});
+    setNewSubtask("");
   };
 
+  const handleAddSubtask = () => {
+    if (newSubtask.trim()) {
+      const subtask = {
+        Id: Date.now(), // Temporary ID, will be replaced by service
+        title: newSubtask.trim(),
+        completed: false
+      };
+      setFormData(prev => ({
+        ...prev,
+        subtasks: [...prev.subtasks, subtask]
+      }));
+      setNewSubtask("");
+    }
+  };
+
+  const handleRemoveSubtask = (subtaskId) => {
+    setFormData(prev => ({
+      ...prev,
+      subtasks: prev.subtasks.filter(s => s.Id !== subtaskId)
+    }));
+  };
+
+  const handleSubtaskKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAddSubtask();
+    }
+  };
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
@@ -126,6 +158,50 @@ const TaskForm = ({ onSubmit, categories, loading }) => {
             error={errors.dueDate}
             required
           />
+</div>
+
+        {/* Subtasks Section */}
+        <div className="space-y-3">
+          <label className="block text-sm font-medium text-gray-700">
+            Subtasks (Optional)
+          </label>
+          
+          <div className="flex gap-2">
+            <Input
+              value={newSubtask}
+              onChange={(e) => setNewSubtask(e.target.value)}
+              onKeyPress={handleSubtaskKeyPress}
+              placeholder="Add a subtask..."
+              className="flex-1"
+            />
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={handleAddSubtask}
+              disabled={!newSubtask.trim()}
+            >
+              <ApperIcon name="Plus" className="w-4 h-4" />
+            </Button>
+          </div>
+
+          {formData.subtasks.length > 0 && (
+            <div className="space-y-2 max-h-40 overflow-y-auto">
+              {formData.subtasks.map((subtask) => (
+                <div key={subtask.Id} className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
+                  <ApperIcon name="GripVertical" className="w-4 h-4 text-gray-400" />
+                  <span className="flex-1 text-sm text-gray-700">{subtask.title}</span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleRemoveSubtask(subtask.Id)}
+                  >
+                    <ApperIcon name="X" className="w-4 h-4 text-red-500" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="flex justify-end pt-4">

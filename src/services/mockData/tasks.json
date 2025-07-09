@@ -8,9 +8,26 @@
     "dueDate": "2024-01-15",
     "completed": false,
     "createdAt": "2024-01-10T09:00:00Z",
-    "completedAt": null
+    "completedAt": null,
+    "subtasks": [
+      {
+        "Id": 101,
+        "title": "Gather Q4 sales data",
+        "completed": true
+      },
+      {
+        "Id": 102,
+        "title": "Analyze performance metrics",
+        "completed": false
+      },
+      {
+        "Id": 103,
+        "title": "Create presentation slides",
+        "completed": false
+      }
+    ]
   },
-  {
+{
     "Id": 2,
     "title": "Buy groceries",
     "description": "Milk, bread, eggs, fruits, vegetables for the week",
@@ -19,9 +36,10 @@
     "dueDate": "2024-01-12",
     "completed": false,
     "createdAt": "2024-01-10T10:30:00Z",
-    "completedAt": null
+    "completedAt": null,
+    "subtasks": []
   },
-  {
+{
     "Id": 3,
     "title": "Schedule doctor appointment",
     "description": "Annual checkup with Dr. Smith",
@@ -30,10 +48,11 @@
     "dueDate": "2024-01-20",
     "completed": false,
     "createdAt": "2024-01-10T14:15:00Z",
-    "completedAt": null
+    "completedAt": null,
+    "subtasks": []
   },
   {
-    "Id": 4,
+"Id": 4,
     "title": "Call mom",
     "description": "Weekly check-in call with family",
     "category": "Personal",
@@ -41,9 +60,11 @@
     "dueDate": "2024-01-13",
     "completed": true,
     "createdAt": "2024-01-09T16:00:00Z",
-    "completedAt": "2024-01-11T18:30:00Z"
+    "completedAt": "2024-01-11T18:30:00Z",
+    "subtasks": []
   },
   {
+{
     "Id": 5,
     "title": "Finish project proposal",
     "description": "Complete the client proposal for the new marketing campaign",
@@ -52,10 +73,32 @@
     "dueDate": "2024-01-14",
     "completed": false,
     "createdAt": "2024-01-10T11:45:00Z",
-    "completedAt": null
+    "completedAt": null,
+    "subtasks": [
+      {
+        "Id": 201,
+        "title": "Research client requirements",
+        "completed": true
+      },
+      {
+        "Id": 202,
+        "title": "Draft proposal outline",
+        "completed": true
+      },
+      {
+        "Id": 203,
+        "title": "Write proposal content",
+        "completed": false
+      },
+      {
+        "Id": 204,
+        "title": "Review and finalize",
+        "completed": false
+      }
+    ]
   },
   {
-    "Id": 6,
+"Id": 6,
     "title": "Workout session",
     "description": "1 hour gym session focusing on cardio and strength training",
     "category": "Health",
@@ -63,6 +106,7 @@
     "dueDate": "2024-01-12",
     "completed": true,
     "createdAt": "2024-01-10T07:00:00Z",
-    "completedAt": "2024-01-11T19:00:00Z"
+    "completedAt": "2024-01-11T19:00:00Z",
+    "subtasks": []
   }
 ]
