@@ -253,10 +253,10 @@ body {
     padding: 12px;
   }
   
-  .btn-primary {
+.btn-primary {
     padding: 10px 16px;
     font-size: 14px;
-}
+  }
 }
 
 /* Drag and drop styles */
@@ -336,7 +336,7 @@ body {
 .progress-ring-small .progress-ring-circle {
   stroke-width: 3;
 }
-}
+
 /* Ensure proper layering during drag */
 .drag-item[data-framer-motion-drag="true"] .task-card {
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
